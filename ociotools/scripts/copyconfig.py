@@ -36,13 +36,36 @@ def copy_view_transforms(houdini_config, blender_config):
         blender_config.addViewTransform(vt)
     return blender_config
 
+# Function to update active displays and views
+def update_active_displays_and_views(blender_config):
+    active_displays = blender_config.getActiveDisplays().split(', ')
+    if 'Apple Display P3 - Display' not in active_displays:
+        active_displays.append('Apple Display P3 - Display')
+        blender_config.setActiveDisplays(', '.join(active_displays))
+    
+    active_views = blender_config.getActiveViews().split(', ')
+    new_views = [
+        'ACES 1.0 - SDR Video',
+        'ACES 1.0 - SDR Video (D60 sim on D65)',
+        'ACES 1.1 - HDR Video (1000 nits & Rec.2020 lim)',
+        'ACES 1.1 - HDR Video (1000 nits & P3 lim)',
+        'ACES 1.1 - HDR Cinema (108 nits & P3 lim)',
+        'Un-tone-mapped'
+    ]
+    for view in new_views:
+        if view not in active_views:
+            active_views.append(view)
+    blender_config.setActiveViews(', '.join(active_views))
+
 # Copy the relevant information
 blender_config = copy_displays_and_views(houdini_config, blender_config)
 blender_config = copy_color_spaces(houdini_config, blender_config)
 blender_config = copy_view_transforms(houdini_config, blender_config)
+update_active_displays_and_views(blender_config)
 
 # Save the modified configuration directly to a new file
 modified_blender_config_path = '../blender/modified_blender_config.ocio'
-blender_config.serialize(modified_blender_config_path)
+with open(modified_blender_config_path, 'w') as f:
+    f.write(blender_config.serialize())
 
 print(f"Modified Blender OCIO configuration saved to: {modified_blender_config_path}")
