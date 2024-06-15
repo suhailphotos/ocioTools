@@ -1,0 +1,112 @@
+ocio_profile_version: 2
+
+environment:
+  {}
+search_path: ""
+strictparsing: false
+luma: [0.2126, 0.7152, 0.0722]
+
+roles:
+  default: raw
+
+file_rules:
+  - !<Rule> {name: Default, colorspace: default}
+
+displays:
+  sRGB:
+    - !<View> {name: Raw, colorspace: raw}
+  Apple Display P3 - Display:
+    - !<View> {name: Raw, colorspace: Raw}
+    - !<View> {name: ACES 1.0 - SDR Video, colorspace: <USE_DISPLAY_NAME>}
+    - !<View> {name: ACES 1.0 - SDR Video (D60 sim on D65), colorspace: <USE_DISPLAY_NAME>}
+    - !<View> {name: ACES 1.1 - HDR Video (1000 nits & Rec.2020 lim), colorspace: <USE_DISPLAY_NAME>}
+    - !<View> {name: ACES 1.1 - HDR Video (1000 nits & P3 lim), colorspace: <USE_DISPLAY_NAME>}
+    - !<View> {name: ACES 1.1 - HDR Cinema (108 nits & P3 lim), colorspace: <USE_DISPLAY_NAME>}
+    - !<View> {name: Un-tone-mapped, colorspace: <USE_DISPLAY_NAME>}
+
+active_displays: [Apple Display P3 - Display]
+active_views: [Raw, ACES 1.0 - SDR Video, ACES 1.0 - SDR Video (D60 sim on D65), ACES 1.1 - HDR Video (1000 nits & Rec.2020 lim), ACES 1.1 - HDR Video (1000 nits & P3 lim), ACES 1.1 - HDR Cinema (108 nits & P3 lim), Un-tone-mapped]
+
+view_transforms:
+  - !<ViewTransform>
+    name: ACES 1.0 - SDR Video
+    description: |
+      Component of ACES Output Transforms for SDR D65 video
+
+      ACEStransformID: urn:ampas:aces:transformId:v1.5:ODT.Academy.RGBmonitor_100nits_dim.a1.0.3
+      ACEStransformID: urn:ampas:aces:transformId:v1.5:ODT.Academy.Rec709_100nits_dim.a1.0.3
+      ACEStransformID: urn:ampas:aces:transformId:v1.5:ODT.Academy.Rec2020_100nits_dim.a1.0.3
+    from_scene_reference: !<BuiltinTransform> {style: ACES-OUTPUT - ACES2065-1_to_CIE-XYZ-D65 - SDR-VIDEO_1.0}
+
+  - !<ViewTransform>
+    name: ACES 1.0 - SDR Video (D60 sim on D65)
+    description: |
+      Component of ACES Output Transforms for SDR D65 video simulating D60 white
+
+      ACEStransformID: urn:ampas:aces:transformId:v1.5:ODT.Academy.RGBmonitor_D60sim_100nits_dim.a1.0.3
+      ACEStransformID: urn:ampas:aces:transformId:v1.5:ODT.Academy.Rec709_D60sim_100nits_dim.a1.0.3
+    from_scene_reference: !<BuiltinTransform> {style: ACES-OUTPUT - ACES2065-1_to_CIE-XYZ-D65 - SDR-VIDEO-D60sim-D65_1.0}
+
+  - !<ViewTransform>
+    name: ACES 1.1 - HDR Video (1000 nits & Rec.2020 lim)
+    description: |
+      Component of ACES Output Transforms for 1000 nit HDR D65 video
+
+      ACEStransformID: urn:ampas:aces:transformId:v1.5:RRTODT.Academy.Rec2020_1000nits_15nits_HLG.a1.1.0
+      ACEStransformID: urn:ampas:aces:transformId:v1.5:RRTODT.Academy.Rec2020_1000nits_15nits_ST2084.a1.1.0
+    from_scene_reference: !<BuiltinTransform> {style: ACES-OUTPUT - ACES2065-1_to_CIE-XYZ-D65 - HDR-VIDEO-1000nit-15nit-REC2020lim_1.1}
+
+  - !<ViewTransform>
+    name: ACES 1.1 - HDR Video (1000 nits & P3 lim)
+    description: |
+      Component of ACES Output Transforms for 1000 nit HDR D65 video
+
+      ACEStransformID: urn:ampas:aces:transformId:v1.5:RRTODT.Academy.P3D65_1000nits_15nits_ST2084.a1.1.0
+    from_scene_reference: !<BuiltinTransform> {style: ACES-OUTPUT - ACES2065-1_to_CIE-XYZ-D65 - HDR-VIDEO-1000nit-15nit-P3lim_1.1}
+
+  - !<ViewTransform>
+    name: ACES 1.0 - SDR Cinema
+    description: |
+      Component of ACES Output Transforms for SDR cinema
+
+      ACEStransformID: urn:ampas:aces:transformId:v1.5:ODT.Academy.P3D60_48nits.a1.0.3
+      ACEStransformID: urn:ampas:aces:transformId:v1.5:ODT.Academy.P3D65_48nits.a1.1.0
+    from_scene_reference: !<BuiltinTransform> {style: ACES-OUTPUT - ACES2065-1_to_CIE-XYZ-D65 - SDR-CINEMA_1.0}
+
+  - !<ViewTransform>
+    name: ACES 1.1 - HDR Cinema (108 nits & P3 lim)
+    description: |
+      Component of ACES Output Transforms for 108 nit HDR D65 cinema
+
+      ACEStransformID: urn:ampas:aces:transformId:v1.5:RRTODT.Academy.P3D65_108nits_7point2nits_ST2084.a1.1.0
+    from_scene_reference: !<BuiltinTransform> {style: ACES-OUTPUT - ACES2065-1_to_CIE-XYZ-D65 - HDR-CINEMA-108nit-7.2nit-P3lim_1.1}
+
+  - !<ViewTransform>
+    name: Un-tone-mapped
+    from_scene_reference: !<BuiltinTransform> {style: UTILITY - ACES-AP0_to_CIE-XYZ-D65_BFD}
+
+display_colorspaces:
+  - !<ColorSpace>
+    name: Apple Display P3 - Display
+    family: Display
+    equalitygroup: ""
+    bitdepth: 32f
+    description: Convert CIE XYZ (D65 white) to P3-D65 with sRGB piecewise EOTF
+    isdata: false
+    categories: [file-io]
+    encoding: sdr-video
+    allocation: uniform
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [2.49349691194143, -0.931383617919124, -0.402710784450717, 0, -0.829488969561575, 1.76266406031835, 0.023624685841944, 0, 0.035845830243784, -0.076172389268042, 0.956884524007687, 0, 0, 0, 0, 1]}
+        - !<ExponentWithLinearTransform> {gamma: 2.4, offset: 0.055, direction: inverse}
+
+colorspaces:
+  - !<ColorSpace>
+    name: raw
+    family: raw
+    equalitygroup: ""
+    bitdepth: 32f
+    description: A raw color space. Conversions to and from this space are no-ops.
+    isdata: true
+    allocation: uniform
