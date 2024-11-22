@@ -1,0 +1,45 @@
+ocio_profile_version: 2
+
+environment:
+  {}
+search_path: ""
+strictparsing: false
+luma: [0.2126, 0.7152, 0.0722]
+
+roles:
+  default: raw
+
+file_rules:
+  - !<Rule> {name: Default, colorspace: default}
+
+displays:
+  sRGB:
+    - !<View> {name: Raw, colorspace: raw}
+  ASUS PA32UCXR - Dolby Vision (PQ):
+    - !<View> {name: HDR PQ 1000 nits, colorspace: Rec.2100-PQ-BT2020-Custom}
+
+active_displays: []
+active_views: []
+
+colorspaces:
+  - !<ColorSpace>
+    name: raw
+    family: raw
+    equalitygroup: ""
+    bitdepth: 32f
+    description: A raw color space. Conversions to and from this space are no-ops.
+    isdata: true
+    allocation: uniform
+
+  - !<ColorSpace>
+    name: Rec.2100-PQ-BT2020-Custom
+    family: ""
+    equalitygroup: ""
+    bitdepth: 32f
+    description: BT.2020 primaries with PQ (HDR) encoding from calibration
+    isdata: false
+    allocation: uniform
+    from_scene_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [1.7167, -0.3557, -0.2539, 0, -0.6667, 1.6165, -0.0832, 0, 0.0177, -0.0422, 0.9421, 0, 0, 0, 0, 1]}
+        - !<ExponentTransform> {value: 2.4}
